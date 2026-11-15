@@ -4,3 +4,4 @@ node_modules/
 *.tgz
 data/*.tmp
 state/
+.model-patch.yml
