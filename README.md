@@ -1,6 +1,6 @@
 # atmo-scatter-lab
 
-**Promise:** turn atmospheric single-scattering transmittance into a *node-verifiable* number — the composite Gauss–Legendre optical depth matches an independent dense-trapezoid oracle to **6.3e-13** relative (the raw oracle is off by **1.28e-6**, and its own error is *predicted* by Euler–Maclaurin to within 2%), while the cheap plane-parallel `sech(χ)` model that every real-time sky uses diverges from the spherical solution by **0.042% at 30°, 0.37% at 60°, 1.69% at 75°, 13.15% at 85° and 130% at 89°** — and stays finite (τ→35.3853) where plane-parallel blows up.
+**Promise:** turn atmospheric single-scattering transmittance into a *node-verifiable* number — the composite Gauss–Legendre optical depth matches an independent dense-trapezoid oracle to **6.3e-13** relative (the raw oracle is off by **1.28e-6**, and that gap is *predicted* by the Euler–Maclaurin expansion to **8.1e-6** relative), while the cheap plane-parallel `sec χ` model that every real-time sky uses diverges from the spherical solution by **0.042% at 30°, 0.37% at 60°, 1.69% at 75°, 13.15% at 85° and 130% at 89°** — and stays finite (τ→35.3853) where plane-parallel blows up.
 
 Upstream: none — original work. The physics is classical (Rayleigh 1871, Chapman 1931); no upstream source tree is copied or patched.
 
@@ -25,8 +25,8 @@ The browser page imports the **same** `src/core.mjs`; dragging the zenith slider
 | horizontal ray (χ=90°) | τ = **35.385319518** vs closed form √(πR/2) = 35.368671515, rel **4.707e-4** (the O(H/R) parabolic correction) |
 | oracle, raw trapezoid | worst rel deviation from core **1.276e-6** |
 | oracle, Euler–Maclaurin corrected | worst rel deviation **6.315e-13** |
-| Euler–Maclaurin *prediction* of the oracle's own error | ≤2% where it dominates, ≤1e-9 absolute everywhere |
-| truncated tail `[sMax, 8·sMax]` | measured **≤ 1.21e-17**, matching the analytic bound `exp(-h(sMax))/h'(sMax)` |
+| Euler–Maclaurin *prediction* of the oracle's own error | **8.137e-6** relative over the 4 cases where the h² term dominates, **2.446e-10** absolute everywhere |
+| truncated tail `[sMax, 8·sMax]` | measured **1.199e-17**, under the analytic bound `exp(-h(sMax))/h'(sMax)` = **1.213e-17** |
 | Rayleigh phase, closed form | sphere integral exactly **1**; GL64 quadrature 0.9999999999999994 |
 | HG phase, closed-form primitive | integrates to 1 for g∈{0.1,0.5,0.9,0.95} to **1.1e-14** |
 | HG phase, fixed GL64 quadrature | err **-1.163e-5** (g=0.9), **-7.970e-3** (g=0.95); GL256 g=0.95 → **-4.81e-11** |
