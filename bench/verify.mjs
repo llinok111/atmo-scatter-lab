@@ -20,6 +20,7 @@ import {
   SKY_WAVELENGTHS_NM,
 } from "../src/core.mjs";
 import { trapezoidTau, correctedTau, cutoffN, trapezoidTail } from "../baseline/naive.mjs";
+import { richardsonTau } from "../baseline/simpson.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = join(here, "..");
@@ -99,6 +100,21 @@ const plan = truncationPlan(R_h, 0, R_h, 1e-16);
 // catastrophic cancellation against the (35 times larger) head integral.
 const tailMeasured = trapezoidTail(R_h, 0, R_h, { sMax: plan.sMax, factor: 8, steps: 1 << 16 });
 check("analytic tail bound dominates the measured trapezoid tail", Math.abs(tailMeasured) <= plan.tailBound * 1.05, `|measured tail|=${Math.abs(tailMeasured).toExponential(3)} <= bound=${plan.tailBound.toExponential(3)}`);
+
+// ---- G4.3b a SECOND independent oracle, different quadrature family --------
+{
+  let worstSimpson = 0;
+  const seen = [];
+  for (const deg of [30, 45, 60, 75, 85, 89]) {
+    const mu = Math.cos((deg * Math.PI) / 180);
+    const mine = opticalDepth(R_h, mu, R_h, OPTS);
+    const other = richardsonTau(R_h, mu, R_h, { n: 4096, b: 4000 });
+    const d = rel(other, mine);
+    worstSimpson = Math.max(worstSimpson, d);
+    seen.push(`${deg}deg:${other.toFixed(9)}`);
+  }
+  check("Simpson+Richardson oracle (own geometry, own rule) agrees to <=1.2e-5 rel over 30..89 deg", worstSimpson < 1.2e-5, `worst rel=${worstSimpson.toExponential(3)} :: ${seen.join(" ")}`);
+}
 
 // ---- G4.4 phase normalisation: closed form vs fixed-node quadrature --------
 check("Rayleigh sphere integral from closed form = 1", rayleighSphereIntegral() === 1, `value=${rayleighSphereIntegral()}`);

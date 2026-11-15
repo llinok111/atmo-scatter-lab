@@ -4,13 +4,13 @@
 
 Upstream: none — original work. The physics is classical (Rayleigh 1871, Chapman 1931); no upstream source tree is copied or patched.
 
-Baseline in-repo: `baseline/naive.mjs` (uniform composite trapezoid, imports nothing).
+Baseline in-repo: `baseline/naive.mjs` (uniform composite trapezoid, imports nothing) and the second independent family `baseline/simpson.mjs` (Simpson + Richardson).
 
 ## Run it
 
 ```bash
 node tools/gen-sample.mjs     # writes data/atmosphere.json (deterministic)
-node bench/verify.mjs         # 22 behavioural assertions, exit 0 on success
+node bench/verify.mjs         # 23 behavioural assertions, exit 0 on success
 node bench/bench.mjs          # writes bench/result.json (7 samples + cold start)
 python3 -m http.server 4173   # then open http://localhost:4173  (browser view)
 ```
@@ -25,6 +25,7 @@ The browser page imports the **same** `src/core.mjs`; dragging the zenith slider
 | horizontal ray (χ=90°) | τ = **35.385319518** vs closed form √(πR/2) = 35.368671515, rel **4.707e-4** (the O(H/R) parabolic correction) |
 | oracle, raw trapezoid | worst rel deviation from core **1.276e-6** |
 | oracle, Euler–Maclaurin corrected | worst rel deviation **6.315e-13** |
+| oracle #2 (Simpson + Richardson, own geometry and rule) | worst rel deviation **1.101e-5** over 30°…89° — a coarser but fully independent family |
 | Euler–Maclaurin *prediction* of the oracle's own error | **8.137e-6** relative over the 4 cases where the h² term dominates, **2.446e-10** absolute everywhere |
 | truncated tail `[sMax, 8·sMax]` | measured **1.199e-17**, under the analytic bound `exp(-h(sMax))/h'(sMax)` = **1.213e-17** |
 | Rayleigh phase, closed form | sphere integral exactly **1**; GL64 quadrature 0.9999999999999994 |
@@ -54,8 +55,9 @@ Cold start: core 0.1551 ms / baseline 3.0188 ms. `core` relStddev is 51% because
 ```
 src/core.mjs          pure computation, no three / DOM / window
 baseline/naive.mjs    independent trapezoid oracle + Euler-Maclaurin error model
+baseline/simpson.mjs  SECOND oracle: composite Simpson + Richardson (h^4, factor 15)
 tools/gen-sample.mjs  deterministic data/atmosphere.json (91 x 25 LUT)
-bench/verify.mjs      22 assertions, prints every value
+bench/verify.mjs      23 assertions, prints every value
 bench/bench.mjs       7 samples + cold start -> bench/result.json
 main.js / index.html  three.js renderer, importmap pinned to three@0.169.0
 ```
