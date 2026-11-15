@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>atmo-scatter-lab — spherical vs plane-parallel transmittance</title>
+    <style>
+      body { margin: 0; font: 13px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; background: #05070c; color: #dfe7f5; }
+      #app { display: flex; height: 100vh; }
+      #view { flex: 1 1 auto; position: relative; min-width: 0; }
+      #sky { position: absolute; inset: 0; }
+      #panel { width: 340px; flex: 0 0 340px; padding: 14px 16px; overflow: auto; border-left: 1px solid #1d2637; background: #080b12; }
+      h1 { font-size: 14px; margin: 0 0 8px; }
+      label { display: block; margin: 10px 0 2px; color: #8fa3c4; }
+      input[type=range] { width: 100%; }
+      table { border-collapse: collapse; width: 100%; margin-top: 10px; }
+      td, th { text-align: left; padding: 2px 4px; border-bottom: 1px solid #16202f; }
+      .num { color: #7fd6a5; }
+      .warn { color: #ffb454; }
+      small { color: #6b7d99; }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <div id="view"><canvas id="sky"></canvas></div>
+      <div id="panel">
+        <h1>atmo-scatter-lab</h1>
+        <small>Numbers below are computed by <code>src/core.mjs</code> in the browser — the same module <code>node bench/verify.mjs</code> asserts. Drag the sliders; node recomputes the same values.</small>
+        <label>zenith angle χ = <span id="zlab">60.0</span>°</label>
+        <input id="zenith" type="range" min="0" max="89.9" step="0.1" value="60" />
+        <label>observer height = <span id="hlab">0.00</span> H</label>
+        <input id="height" type="range" min="0" max="20" step="0.25" value="0" />
+        <table id="out"></table>
+        <p id="verdict"></p>
+      </div>
+    </div>
+    <script type="importmap">
+      { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js" } }
+    </script>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

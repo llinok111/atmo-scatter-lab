@@ -1,0 +1,62 @@
+{
+  "node": "v24.19.0",
+  "generatedAt": "2026-11-15T06:34:44.527Z",
+  "cases": 5,
+  "coreQuadrature": {
+    "panels": 12,
+    "nodes": 16,
+    "evaluationsPerCase": 192
+  },
+  "baseline": {
+    "min": 1.788081,
+    "median": 1.806886,
+    "p95": 3.018754,
+    "max": 3.018754,
+    "mean": 2.0488097142857145,
+    "stddev": 0.43710761969261863,
+    "relStddev": 0.21334710424535905
+  },
+  "evalRatio": 85.33333333333333,
+  "coldStartMs": {
+    "core": 0.155071,
+    "baseline": 3.018754
+  },
+  "samples": 7,
+  "coreMs": [
+    0.155071,
+    0.067418,
+    0.065584,
+    0.054963,
+    0.054283,
+    0.15974,
+    0.054292
+  ],
+  "baselineMs": [
+    3.018754,
+    2.333706,
+    1.806886,
+    1.789064,
+    1.788081,
+    1.791197,
+    1.81398
+  ],
+  "core": {
+    "min": 0.054283,
+    "median": 0.065584,
+    "p95": 0.15974,
+    "max": 0.15974,
+    "mean": 0.08733585714285715,
+    "stddev": 0.04461368070583785,
+    "relStddev": 0.5108289099729368
+  },
+  "medianSpeedup": 27.550713588680164,
+  "p95Speedup": 18.897921622636787,
+  "numbers": {
+    "verticalTau": 0.9999999999999627,
+    "horizontalTau": 35.38531951770971,
+    "horizontalHalfGaussianLimit": 35.368671515216484,
+    "horizontalRelDiffToLimit": 0.00047069911817481096,
+    "planeParallelAt89Deg": 57.29868849855063,
+    "sphericalAt89Deg": 24.866396120921202
+  }
+}
